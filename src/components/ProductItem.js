@@ -2,7 +2,7 @@ import { Component } from "../common/Component.js";
 import {cartContext} from "../contexts/CartContext.js"
 export class ProductItem extends Component {
   render() {
-    const { product } = this.props;
+    const { product, cartContext } = this.props;
     const productItem = document.createElement('section')
     productItem.className = 'product';
     productItem.innerHTML = `

@@ -7,13 +7,27 @@ export class CartItem extends Component {
     const container = document.createElement('div');
     container.className = 'cart-item';
     container.innerHTML = `
-      <span>${item.title}</span>
-      <button>Delete</button>
-    `;
+      <span>${item.title} <strong>x${item.count}</span>
+      <button class="decrease-btn"> - </button> 
+      <button class="delete-btn">🗑️</button>    
+  `;
 
-    container.querySelector('button').addEventListener('click',()=>{
+  container.querySelector('.decrease-btn').addEventListener('click', () => {
+      if (item.count > 1) {
+        item.count -= 1;
+      } else {
+        return;
+      }
+      cartContext.notifyListeners();
+    });
+
+    container.querySelector('.delete-btn').addEventListener('click', () => {
+      container.classList.add('removing');
+      setTimeout(() => {
       cartContext.removeItem(item.id);
-    })
+      }, 400); 
+    });
+
 
     return container;
   }

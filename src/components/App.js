@@ -5,12 +5,19 @@ import { Header } from "./Header.js";
 import { ProductList } from "./ProductList.js";
 
 export class App extends Component {
-   async render() {
+  async render() {
     const container = document.createElement('div');
 
-    const header = new Header().render();
+    const header = await new Header().render();
+    container.appendChild(header); 
+
     const main = document.createElement('main');
-    const footer = new Footer().render();
+    const logo = document.createElement('div');
+    logo.className = 'logo_title';
+    logo.innerHTML = `<h1 class="page-title">Snappy Shop</h1>`;
+
+    const products_main = document.createElement('div');
+    products_main.className = "products-main";
 
     const productSection = document.createElement('section');
     productSection.id = 'products';
@@ -18,15 +25,21 @@ export class App extends Component {
     const cartSection = document.createElement('section');
     cartSection.id = 'cart';
 
-    main.appendChild(productSection);
-    main.appendChild(cartSection);
+    products_main.appendChild(productSection);
+    products_main.appendChild(cartSection);
+    main.appendChild(logo);
+    main.appendChild(products_main);
 
-    container.appendChild(header);
+    const footer = new Footer().render();
+
     container.appendChild(main);
     container.appendChild(footer);
 
-    // Pasar cartContext como prop
-    await new ProductList({ cartContext: this.props.cartContext }).mount(productSection);
+    const productList = new ProductList({ cartContext: this.props.cartContext });
+    await productList.mount(productSection);
+
+    productList.setupFilters();
+
     new CartList({ cartContext: this.props.cartContext }).mount(cartSection);
 
     return container;

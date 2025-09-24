@@ -13,7 +13,12 @@ export class CartContext {
   }
 
   addItem(product){
-    this.cart.push(product);
+    const found = this.cart.find(item => item.id === product.id);
+    if(found){
+      found.count += 1
+    }else{
+      this.cart.push({...product,count: 1});
+    }
     this.notifyListeners();
   }
 

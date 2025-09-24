@@ -9,16 +9,32 @@ export class CartList extends Component {
     container.className = 'cart-list';
 
     const title = document.createElement('h2');
-    title.textContent = 'Carrito';
+    title.textContent = 'Cart';
     container.appendChild(title);
+
+    const totalCount = document.createElement('div');
+    totalCount.className = 'cart-total-count';
+    container.appendChild(totalCount);
+
+    const totalPay = document.createElement('div');
+    totalPay.className = 'cart-total-pay';
+    container.appendChild(totalPay);
 
     const list = document.createElement('div');
     container.appendChild(list);
 
     const renderItems = (cart) => {
+
+      const total = cart.reduce((sum, item) => sum + (item.count || 1), 0);
+      totalCount.textContent = `Total products: ${total}`;
+
+      const totalAmount = cart.reduce((sum, item) => sum + (item.price * (item.count || 1)), 0);
+      totalPay.textContent = `Total: $${totalAmount.toFixed(2)}`;
+
+
       list.innerHTML = '';
       if (cart.length === 0) {
-        list.innerHTML = '<p>Vacío</p>';
+        list.innerHTML = '<p>Empty</p>';
       } else {
         cart.forEach(item => {
           const cartItem = new CartItem({ item, cartContext });

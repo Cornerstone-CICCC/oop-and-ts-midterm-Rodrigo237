@@ -22,8 +22,8 @@ export class ProductList extends Component {
     this.filtered = [...this.products];
 
     this.renderItems();
-    this.setupFilters();
 
+    this.setupFilters();
     return container;
   }
 
@@ -35,25 +35,37 @@ export class ProductList extends Component {
     });
   }
 
-  setupFilters(){
-    const searchInput = document.getElementById('searchInput');
-    const categorySelect = document.getElementById('categorySelect');
-    if (!searchInput || !categorySelect) return;
-    console.log("Filtrando por categoría:", category)
+setupFilters(){
+  const searchInput = document.getElementById('searchInput');
+  const categorySelect = document.getElementById('categorySelect');
+  if (!searchInput || !categorySelect) return;
 
-    const filterProducts = () =>{
-      const search = searchInput.value.toLowerCase();
-      const category = categorySelect.value;
-      console.log("Filtrando por categoría:", category);
-      this.filtered = this.products.filter(p=>{
-        const matchCategory = category === 'all' || p.category === category;
-        const matchSearch = p.title.toLowerCase().includes(search);
-        return matchCategory && matchSearch;
-      });
-      this.renderItems();
-    };
+  const filterProducts = () => {
+    const search = searchInput.value.toLowerCase();
+    const category = categorySelect.value;
 
-    searchInput.addEventListener('input',filterProducts);
-    categorySelect.addEventListener('change',filterProducts);
-  }
+    console.log("Opciones del select:");
+    [...categorySelect.options].forEach(opt => console.log(opt.value));
+
+    this.filtered = this.products.filter(p => {
+      const matchCategory = category === 'all' || p.category === category;
+      const matchSearch = p.title.toLowerCase().includes(search);
+      return matchCategory && matchSearch;
+    });
+
+    console.log("Filtrando por:", { search, category });
+    console.log("Productos filtrados:", this.filtered.length);
+
+    if (this.filtered.length === 0) {
+      console.log("No hay productos que coincidan con la búsqueda/categoría.");
+    }
+
+    this.renderItems();
+  };
+
+  searchInput.addEventListener('input', filterProducts);
+  categorySelect.addEventListener('change', filterProducts);
+
+  filterProducts(); // Ejecuta una vez al principio para mostrar todo
+}
 }

@@ -7,10 +7,21 @@ export class CartItem extends Component {
     const container = document.createElement('div');
     container.className = 'cart-item';
     container.innerHTML = `
-      <span>${item.title} <strong>x${item.count}</span>
-      <button class="decrease-btn"> - </button> 
-      <button class="delete-btn">🗑️</button>    
-  `;
+    <img src="${item.image}" alt="${item.title}" />
+    <span class="item-count"><strong>x${item.count}</strong></span>
+    <span class="item-price">$${item.price}</span>
+    <div class="quantity-controls">
+      <button class="increase-btn">+</button>
+      <button class="decrease-btn">−</button>
+    </div>
+    <button class="delete-btn">🗑️</button>
+    `;
+
+
+  container.querySelector('.increase-btn').addEventListener('click', () => {
+      item.count += 1;
+      cartContext.notifyListeners();
+    });
 
   container.querySelector('.decrease-btn').addEventListener('click', () => {
       if (item.count > 1) {

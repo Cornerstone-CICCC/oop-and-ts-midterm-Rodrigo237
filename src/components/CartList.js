@@ -14,11 +14,15 @@ export class CartList extends Component {
 
     const totalCount = document.createElement('div');
     totalCount.className = 'cart-total-count';
-    container.appendChild(totalCount);
-
     const totalPay = document.createElement('div');
     totalPay.className = 'cart-total-pay';
-    container.appendChild(totalPay);
+
+    const totals = document.createElement('div');
+    totals.className = 'cart-summary-totals';
+    totals.appendChild(totalCount);
+    totals.appendChild(totalPay);
+
+    container.appendChild(totals);
 
     const list = document.createElement('div');
     container.appendChild(list);

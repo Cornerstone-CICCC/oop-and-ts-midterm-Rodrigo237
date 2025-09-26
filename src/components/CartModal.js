@@ -23,7 +23,13 @@ export class CartModal extends Component {
     let total = 0;
     cartContext.getItems().forEach(item => {
       const li = document.createElement('li');
-      li.textContent = `${item.title} - $${item.price}`;
+      li.innerHTML = `
+      <img src="${item.image}" alt="${item.title}" />
+      <div class="item-info">
+        <span class="item-title">${item.title}</span>
+        <span class="item-price">$${item.price}</span>
+      </div>
+      `;
       list.appendChild(li);
       total += item.price;
     });
@@ -37,11 +43,17 @@ export class CartModal extends Component {
     payBtn.textContent = 'Simulate Payment';
 
     payBtn.addEventListener('click', () => {
-      alert('✅ Payment simulated! Thank you for your purchase.');
-      cartContext.cart = []
-      cartContext.notifyListeners()
-      modal.remove();
-    });
+  if (total <= 0) {
+    alert('⚠️ Your cart is empty. Add products before simulating payment.');
+    return;
+  }
+
+  alert('✅ Payment simulated! Thank you for your purchase.');
+  cartContext.cart = [];
+  cartContext.notifyListeners();
+  modal.remove();
+});
+
 
     closeBtn.addEventListener('click', () => {
       modal.remove();

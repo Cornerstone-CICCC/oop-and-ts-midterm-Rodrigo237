@@ -7,6 +7,10 @@ export class Header extends Component {
     el.innerHTML = `
     <div class="nav-left">
         <img class="logo" src="../images/snappy_logo.jpg"/>
+
+        <button class="menu-toggle" aria-label="Toggle menu">
+          ☰
+        </button>
         <nav class="nav-search">
           <button id="homeBtn">Home</button>
           <div class="filters">
@@ -58,6 +62,15 @@ export class Header extends Component {
     const modal = new CartModal().render();
       document.body.appendChild(modal);
     });
+
+    const menuToggle = el.querySelector('.menu-toggle');
+    const navSearch = el.querySelector('.nav-search');
+
+    menuToggle.addEventListener('click', () => {
+      navSearch.classList.toggle('active');
+    });
+
+
 
     return el;
   }

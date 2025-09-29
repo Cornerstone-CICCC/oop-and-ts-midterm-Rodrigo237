@@ -2,10 +2,14 @@ import { Component } from "../common/Component.js";
 import { ProductItem } from "./ProductItem.js";
 
 export class ProductList extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.products = []
-    this.filtered = []
+    this.state = {
+      products: [],
+      filtered: [],
+      filterCategory: "",
+      filterSearch: ""
+    };
     this.productsContainer = null;
   }
 
@@ -18,54 +22,55 @@ export class ProductList extends Component {
     container.appendChild(this.productsContainer);
 
     const res = await fetch('https://fakestoreapi.com/products');
-    this.products = await res.json();
-    this.filtered = [...this.products];
-
+    this.setState({
+      products: await res.json()
+    });
     this.renderItems();
-
-    this.setupFilters();
+    setTimeout(() => {
+      this.setupFilters();
+    }, 0);
+    
     return container;
   }
 
   renderItems() {
     this.productsContainer.innerHTML = '';
-    this.filtered.forEach(product => {
+    const listFiltered  = this.state.products
+    .filter((product) => {
+      const matchCategory = !this.state.filterCategory || this.state.filterCategory === "all" || product.category === this.state.filterCategory;
+      const matchSearch = product.title.toLowerCase().includes(this.state.filterSearch.toLowerCase());
+      return matchCategory && matchSearch;
+    })
+    listFiltered.forEach(product => {
       const item = new ProductItem({ product, cartContext: this.props.cartContext });
       this.productsContainer.appendChild(item.render());
     });
   }
 
-setupFilters(){
-  const searchInput = document.getElementById('searchInput');
-  const categorySelect = document.getElementById('categorySelect');
-  if (!searchInput || !categorySelect) return;
-
-  const filterProducts = () => {
-    const search = searchInput.value.toLowerCase();
-    const category = categorySelect.value;
-
-    console.log("Opciones del select:");
-    [...categorySelect.options].forEach(opt => console.log(opt.value));
-
-    this.filtered = this.products.filter(p => {
-      const matchCategory = category === 'all' || p.category === category;
-      const matchSearch = p.title.toLowerCase().includes(search);
-      return matchCategory && matchSearch;
-    });
-
-    console.log("Filtrando por:", { search, category });
-    console.log("Productos filtrados:", this.filtered.length);
-
-    if (this.filtered.length === 0) {
-      console.log("No hay productos que coincidan con la búsqueda/categoría.");
+  setupFilters() {
+    const searchInput = document.getElementById('searchInput');
+    const categorySelect = document.getElementById('categorySelect');
+   
+    if (categorySelect) {
+      categorySelect.addEventListener('change', this.updateFilters);
     }
 
-    this.renderItems();
-  };
+    if (searchInput) {
+      searchInput.addEventListener('input', this.updateFilters);
+    }
 
-  searchInput.addEventListener('input', filterProducts);
-  categorySelect.addEventListener('change', filterProducts);
+  }
 
-  filterProducts(); // Ejecuta una vez al principio para mostrar todo
-}
+  updateFilters = () => {
+    const category = document.querySelector('#categorySelect')?.value || "";
+    const search = document.querySelector('#searchInput')?.value || "";
+
+    this.setState({
+      filterCategory: category,
+      filterSearch : search
+    })
+
+    this.renderItems()
+
+  }
 }

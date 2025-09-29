@@ -10,14 +10,18 @@ export class ProductItem extends Component {
       <img src="${product.image}" alt="${product.title}"/>
     </div>
     <div class="product-info">
-      <span class="category-label">${product.category}</span>
-      <h3 class="product-title">${product.title}</h3>
-      <p class="product-description">${product.description}</p>
-      <div>
-        <span class="product-price">$${product.price}</span>
-        <span class="product-rating">⭐ ${product.rating.rate}</span>
-      </div>
-      <button class="add-to-cart">🛒 Add to Cart</button>
+     <div>
+        <span class="category-label">${product.category}</span>
+        <h3 class="product-title">${product.title}</h3>
+        <p class="product-description">${product.description}</p>
+     </div>
+     <div>
+        <div>
+          <span class="product-price">$${product.price}</span>
+          <span class="product-rating">⭐ ${product.rating.rate}</span>
+        </div>
+        <button class="add-to-cart">🛒 Add to Cart</button>
+     </div>
     </div>  
     `
 

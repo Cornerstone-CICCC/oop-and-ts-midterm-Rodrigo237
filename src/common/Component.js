@@ -7,14 +7,9 @@ export class Component {
 
   setState(newState) {
     this.state = { ...this.state, ...newState };
-    this.update();
   }
 
-  update() {
-    const newEl = this.render();
-    this.element.replaceWith(newEl);
-    this.element = newEl;
-  }
+ 
 
   render() {
     throw new Error('Component should have a render() method!');

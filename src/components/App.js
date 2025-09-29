@@ -16,6 +16,10 @@ export class App extends Component {
     logo.className = 'logo_title';
     logo.innerHTML = `<h1 class="page-title">Snappy Shop</h1>`;
 
+    const title = document.createElement('div');
+    title.className='title';
+    title.innerHTML = '<h2 >Our Products</h2>'
+
     const products_main = document.createElement('div');
     products_main.className = "products-main";
 
@@ -28,6 +32,7 @@ export class App extends Component {
     products_main.appendChild(productSection);
     products_main.appendChild(cartSection);
     main.appendChild(logo);
+    main.appendChild(title)
     main.appendChild(products_main);
 
     const footer = new Footer().render();
